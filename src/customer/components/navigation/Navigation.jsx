@@ -26,6 +26,32 @@ function classNames(...classes) {
 export default function Navigation() {
   const [open, setOpen] = useState(false)
 
+  const [openAuthModal,setOpenAuthModal]=useState(false)
+  const [anchorEl,setAnchorEl] = useState(null)
+  const openUserMenu = Boolean(anchorEl)
+  const jwt = localStorage.getItem("jwt")
+
+  const handleUserClick = (event)=>{
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = (event)=>{
+    setAnchorEl(null);
+  };
+
+  const handleOpen = ()=>{
+    setOpenAuthModal(true);
+  };
+
+  const handleClose = ()=>{
+    setOpenAuthModal(false);
+  };
+
+  const handleCategoryClick = (category, section ,item ,Close)=>{
+
+    // close();
+  }
+
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -141,19 +167,14 @@ export default function Navigation() {
 
                 <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                   <div className="flow-root">
-                    <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+                    <a href="/" className="-m-2 block p-2 font-medium text-gray-900">
                       Sign in
-                    </a>
-                  </div>
-                  <div className="flow-root">
-                    <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
-                      Create account
                     </a>
                   </div>
                 </div>
 
                 <div className="border-t border-gray-200 px-4 py-6">
-                  <a href="#" className="-m-2 flex items-center p-2">
+                  <a href="/" className="-m-2 flex items-center p-2">
                     <img
                       src="https://tailwindui.com/img/flags/flag-canada.svg"
                       alt=""
@@ -268,9 +289,20 @@ export default function Navigation() {
                                           >
                                             {section.items.map((item) => (
                                               <li key={item.name} className="flex">
-                                                <a href={item.href} className="hover:text-gray-800">
+                                                <p 
+                                                  onClick={()=>{
+                                                    handleCategoryClick(
+                                                      category,
+                                                      section,
+                                                      item,
+                                                      // close
+                                                    )
+                                                  }}
+                                                  className='cursor-pointer hover:text-gray-800'
+                                                >
                                                   {item.name}
-                                                </a>
+                                                </p>
+                                               
                                               </li>
                                             ))}
                                           </ul>
@@ -320,9 +352,9 @@ export default function Navigation() {
                       </Avatar>
                       <Menu
                         id="basic-menu"
-                        // anchorEl={anchorEl}
-                        // open={openUserMenu}
-                        // onClose={handleCloseUserMenu}
+                        anchorEl={anchorEl}
+                        open={openUserMenu}
+                        onClose={handleCloseUserMenu}
                         MenuListProps={{
                           "aria-labelledby":"basic-button"
                         }}
@@ -342,7 +374,7 @@ export default function Navigation() {
                     </div>
                    ):(
                       <Button
-                      // onClick={handleOpen} 
+                      onClick={handleOpen} 
                       className="text-sm font-medium text-gray-700 hover:text-gray-800">
                         Sign in
                       </Button>
