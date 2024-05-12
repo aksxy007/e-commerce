@@ -6,22 +6,29 @@ import { Button } from "@mui/material";
 
 
 const HomeSectionCarousel = ({data,sectionName}) => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [index, setIndex] = useState(0);
   const responsive = {
     0: { items: 1 },
     350: { items: 2 },
     568: { items: 3 },
     720: { items: 3 },
-    1024: { items: 5.5 },
+    1024: { items:4.5 },
   };
 
-  const slidePrev = () => setActiveIndex(activeIndex - 1)
-  const slideNext = () => setActiveIndex(activeIndex + 1);
+  const slidePrev = () => {
+    setIndex(index - 1)
+  }
+  const slideNext = () => {
+    setIndex(index + 1)
+  }
 
-  const syncActiveIndex = ({ item }) => setActiveIndex(item);
-
+  const syncIndex = ({ item }) => {
+    setIndex(item)
+  };
 
   const items = data.slice(0, 10).map((item) => <HomeSectionCard product={item} />);
+
+
 
   return (
     <div className="border">
@@ -32,10 +39,12 @@ const HomeSectionCarousel = ({data,sectionName}) => {
           disableButtonsControls
           responsive={responsive}
           disableDotsControls
-          onSlideChanged={syncActiveIndex}
-          activeIndex={activeIndex}
+          onSlideChanged={index}
+          activeIndex={syncIndex}
+
+          
         />
-        {activeIndex !== items.length - 5 && (
+        {index !== items.length && (
           <Button
             variant="contained"
             className="z-50 bg-white"
@@ -55,7 +64,7 @@ const HomeSectionCarousel = ({data,sectionName}) => {
           </Button>
         )}
 
-        {activeIndex !== 0 && <Button
+        {index !== 0 && <Button
           variant="contained"
           className="z-50 bg-white"
           onClick={slidePrev}

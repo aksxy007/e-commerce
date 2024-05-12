@@ -18,6 +18,7 @@ import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@her
 import {navigation} from './navigationData'
 import { Avatar, Button, Menu, MenuItem } from '@mui/material'
 import { deepPurple } from '@mui/material/colors'
+import { useNavigate } from 'react-router-dom'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -25,7 +26,7 @@ function classNames(...classes) {
 
 export default function Navigation() {
   const [open, setOpen] = useState(false)
-
+  const navigate =useNavigate()
   const [openAuthModal,setOpenAuthModal]=useState(false)
   const [anchorEl,setAnchorEl] = useState(null)
   const openUserMenu = Boolean(anchorEl)
@@ -47,13 +48,13 @@ export default function Navigation() {
     setOpenAuthModal(false);
   };
 
-  const handleCategoryClick = (category, section ,item ,Close)=>{
-
+  const handleCategoryClick = (category, section ,item ,close)=>{
+    navigate(`/${category.id}/${section.id}/${item.id}`)
     // close();
   }
 
   return (
-    <div className="bg-white">
+    <div className="bg-white shadow-md shadow-gray-500">
       {/* Mobile menu */}
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-40 lg:hidden" onClose={setOpen}>
