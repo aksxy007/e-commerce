@@ -1,9 +1,12 @@
 import React from 'react'
 import "./ProductCard.css"
+import { useNavigate } from 'react-router-dom'
 
 const ProductCard = ({product}) => {
+    const navigate = useNavigate();
+    const discountPercent = 100-((product.discountedPrice/product.price)*100)
   return (
-    <div className='productCard w-[15rem] m-3 transition-all cursor-pointer'>
+    <div onClick={()=> navigate(`/product/${5}`)} className='productCard w-[15rem] m-3 transition-all cursor-pointer'>
         <div className='h-[15rem]'>
             <img className='h-full w-full object-cover object-left-top'
                 src={product.imageUrl} alt="" />
@@ -28,7 +31,7 @@ const ProductCard = ({product}) => {
                     ₹{product.price}
                 </p>
                 <p className='text-green-600 font-semibold'>
-                    {product.discountPersent}%
+                    {Math.trunc(discountPercent)}%
                 </p>
             </div>
         </div>

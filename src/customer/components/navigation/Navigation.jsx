@@ -12,13 +12,17 @@
   }
   ```
 */
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Popover, Tab, Transition } from '@headlessui/react'
 import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import {navigation} from './navigationData'
 import { Avatar, Button, Menu, MenuItem } from '@mui/material'
 import { deepPurple } from '@mui/material/colors'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate ,useLocation} from 'react-router-dom'
+import AuthModal from '../../Auth/AuthModal'
+import { useDispatch, useSelector } from "react-redux";
+import { getUser, logout } from '../../../State/Auth/Action'
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -27,10 +31,15 @@ function classNames(...classes) {
 export default function Navigation() {
   const [open, setOpen] = useState(false)
   const navigate =useNavigate()
+  const location= useLocation()
   const [openAuthModal,setOpenAuthModal]=useState(false)
+  const [userRegistered,setUserRegistered] = useState(false)
+  const [userInitial,setUserInitial] = useState("R");
   const [anchorEl,setAnchorEl] = useState(null)
   const openUserMenu = Boolean(anchorEl)
-  const jwt = localStorage.getItem("jwt")
+  const dispatch =useDispatch();
+  const jwt = localStorage.getItem("jwt");
+  const {auth} = useSelector(store=>store)
 
   const handleUserClick = (event)=>{
     setAnchorEl(event.currentTarget);
@@ -50,8 +59,32 @@ export default function Navigation() {
 
   const handleCategoryClick = (category, section ,item ,close)=>{
     navigate(`/${category.id}/${section.id}/${item.id}`)
-    // close();
+    close();
   }
+
+  const handleLogout = ()=>{
+    dispatch(logout())
+    handleCloseUserMenu()
+    setUserRegistered(false)
+  }
+
+  useEffect(()=>{
+    if(jwt){
+      dispatch(getUser(jwt))
+    }
+  },[jwt,auth.jwt])
+
+  useEffect(()=>{
+    if(auth.user){
+      handleClose();
+      setUserRegistered(true)
+      setUserInitial(auth.user.firstName.substring(0,1))
+    }
+    if(location.pathname==='/login'|| location.pathname==='/register'){
+      navigate(-1)
+    }
+    
+  },[auth.user])
 
   return (
     <div className="bg-white shadow-md shadow-gray-500">
@@ -226,7 +259,7 @@ export default function Navigation() {
                 <div className="flex h-full space-x-8">
                   {navigation.categories.map((category) => (
                     <Popover key={category.name} className="flex">
-                      {({ open }) => (
+                      {({ open,close }) => (
                         <>
                           <div className="relative flex">
                             <Popover.Button
@@ -296,7 +329,7 @@ export default function Navigation() {
                                                       category,
                                                       section,
                                                       item,
-                                                      // close
+                                                      close
                                                     )
                                                   }}
                                                   className='cursor-pointer hover:text-gray-800'
@@ -334,11 +367,11 @@ export default function Navigation() {
 
               <div className="ml-auto flex items-center">
                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                  { true ? (
+                  { userRegistered ? (
                     <div>
                       <Avatar
                         className='text-white'
-                        // onClick={handleUserClick}
+                        onClick={handleUserClick}
                         aria-controls={open ? "basic-menu": undefined}
                         aria-haspopup="true"
                         aria-expanded={open ? "true":undefined}
@@ -349,7 +382,7 @@ export default function Navigation() {
                           cursor:"pointer",
                         }}
                       >
-                        R
+                        {userInitial}
                       </Avatar>
                       <Menu
                         id="basic-menu"
@@ -361,15 +394,18 @@ export default function Navigation() {
                         }}
                       >
                         <MenuItem 
-                        // onClick={handleCloseUserMenu}
+                        onClick={handleCloseUserMenu}
+                        // {auth.user?.role === "ROLE_ADMIN"
+                        //     ? "Admin Dashboard"
+                        //     : "My Orders"}
                         >
                           Profile
                         </MenuItem>
-                        <MenuItem>
+                        <MenuItem onClick={()=> navigate("/account/order")}>
                           My Orders
                         </MenuItem>
-                        <MenuItem>
-                          Logout
+                        <MenuItem onClick={handleLogout}>
+                          LOGOUT
                         </MenuItem>
                       </Menu>
                     </div>
@@ -420,6 +456,8 @@ export default function Navigation() {
           </div>
         </nav>
       </header>
+
+      <AuthModal handleClose={handleClose} open={openAuthModal}/>
     </div>
   )
 }

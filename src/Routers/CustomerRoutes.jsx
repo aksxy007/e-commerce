@@ -18,13 +18,15 @@ const CustomerRoutes = () => {
             <Navigation/>
         </div>
         <Routes>
+            <Route path='/login' element={<HomePage/>}></Route>
+            <Route path='/register' element={<HomePage/>}></Route>
             <Route path='/' element={<HomePage/>}></Route>
-            <Route path='/cart' element={<Cart/>}></Route>
             <Route path='/:levelOne/:levelTwo/:levelThree' element={<Product/>}></Route>
-            {/* <Route path='/' element={<ProductDetails/>}></Route>
-            <Route path='/' element={<Checkout/>}></Route>
-            <Route path='/' element={<Orders/>}></Route>
-            <Route path='/' element={<OrderDetails/>}></Route> */}
+            <Route path='/product/:productId' element={<ProductDetails/>}></Route>
+            <Route path='/cart' element={<Cart/>}></Route>
+            <Route path='/checkout' element={<Checkout/>}></Route>
+            <Route path='/account/order' element={<Orders/>}></Route>
+            <Route path='/account/order/:orderId' element={<OrderDetails/>}></Route>
         </Routes>
         <div>
             <Footer/>
