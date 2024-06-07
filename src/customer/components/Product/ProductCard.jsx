@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 const ProductCard = ({product}) => {
     const navigate = useNavigate();
-    const discountPercent = 100-((product.discountedPrice/product.price)*100)
+    const discountPercent = product.discountPercent;
   return (
     <div onClick={()=> navigate(`/product/${5}`)} className='productCard w-[15rem] m-3 transition-all cursor-pointer'>
         <div className='h-[15rem]'>
