@@ -21,7 +21,8 @@ import { deepPurple } from '@mui/material/colors'
 import { useNavigate ,useLocation} from 'react-router-dom'
 import AuthModal from '../../Auth/AuthModal'
 import { useDispatch, useSelector } from "react-redux";
-import { getUser, logout } from '../../../State/Auth/Action'
+import { getUser, logout} from '../../../State/Auth/Action'
+import { getCart } from '../../../State/Cart/Action'
 
 
 function classNames(...classes) {
@@ -39,7 +40,7 @@ export default function Navigation() {
   const openUserMenu = Boolean(anchorEl)
   const dispatch =useDispatch();
   const jwt = localStorage.getItem("jwt");
-  const {auth} = useSelector(store=>store)
+  const {auth,cart} = useSelector(store=>store)
 
   const handleUserClick = (event)=>{
     setAnchorEl(event.currentTarget);
@@ -68,6 +69,10 @@ export default function Navigation() {
     setUserRegistered(false)
   }
 
+  const handleGoToCart=()=>{
+    navigate("/cart")
+  }
+
   useEffect(()=>{
     if(jwt){
       dispatch(getUser(jwt))
@@ -85,6 +90,10 @@ export default function Navigation() {
     }
     
   },[auth.user])
+
+  useEffect(()=>{
+    dispatch(getCart())
+  },[cart.removeCartItem])
 
   return (
     <div className="bg-white shadow-md shadow-gray-500">
@@ -442,12 +451,12 @@ export default function Navigation() {
 
                 {/* Cart */}
                 <div className="ml-4 flow-root lg:ml-6">
-                  <Button className="group -m-2 flex items-center p-2">
+                  <Button className="group -m-2 flex items-center p-2" onClick={handleGoToCart}>
                     <ShoppingBagIcon
                       className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                       aria-hidden="true"
                     />
-                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
+                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">{cart?.cart?.cartItems?.length}</span>
                     <span className="sr-only">items in cart, view bag</span>
                   </Button>
                 </div>

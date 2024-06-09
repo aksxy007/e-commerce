@@ -9,7 +9,7 @@ import {
   Squares2X2Icon,
 } from "@heroicons/react/20/solid";
 import { mens_kurtas } from "../../../Data/mens_kurtas";
-
+import Pagination from '@mui/material/Pagination';
 import ProductCard from "./ProductCard";
 import { filters, singleFilter, color } from "./FiltterData";
 import Radio from "@mui/material/Radio";
@@ -37,7 +37,7 @@ export default function Product() {
   const navigate = useNavigate();
   const param = useParams();
   const dispatch = useDispatch()
-  const {product} = useSelector(store=>store)
+  const {products} = useSelector(store=>store)
 
   const decodedQueryString = decodeURIComponent(location.search);
   const searchParams = new URLSearchParams(decodedQueryString);
@@ -46,9 +46,19 @@ export default function Product() {
   const priceValue = searchParams.get("price");
   const discount = searchParams.get("discount");
   const sortValue = searchParams.get("sort");
-  const pageNumber = searchParams.get("pageNumber") || 1;
-  const pageSize = searchParams.get("pageSize") || 12;
+  const pageNumber = searchParams.get("page") || 1;
+  // const pageSize = searchParams.get("pageSize") || 12;
   const stock = searchParams.get("stock");
+
+
+  const handlePaginationChange=(event,value)=>{
+    const searchparams = new URLSearchParams(location.search);
+    searchparams.set("page",value);
+    const query=searchparams.toString();
+    // console.log(searchparams,value)
+    console.log(value)
+    navigate({search:`?${query}`})
+  }
 
   const handleFilter = (value, sectionId) => {
     const searchParams = new URLSearchParams(location.search);
@@ -92,7 +102,7 @@ export default function Product() {
       maxPrice,
       minDiscount:discount||0,
       sort:sortValue||"price_low",
-      pageNumber:pageNumber-1,
+      pageNumber:pageNumber-1||0,
       pageSize:12,
       stock:stock
     }
@@ -486,11 +496,16 @@ export default function Product() {
               {/* Product grid */}
               <div className="lg:col-span-4 w-full">
                 <div className="flex flex-wrap justify-center bg-white py-5">
-                  {product.products && product.products?.content?.map((item) => (
+                  {products.products && products.products?.content?.map((item) => (
                     <ProductCard product={item} />
                   ))}
                 </div>
               </div>
+            </div>
+          </section>
+          <section className="w-full px-[3.6rem]">
+            <div className="px-4 py-5 justify-center flex">
+              <Pagination count={products.products?.totalPages} color="secondary" onChange={handlePaginationChange}/>
             </div>
           </section>
         </main>

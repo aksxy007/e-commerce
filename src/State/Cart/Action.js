@@ -17,7 +17,9 @@ import {
 export const addItemToCart = (cartReq) => async (dispatch) => {
   dispatch({ type: ADD_ITEM_TO_CART_REQUEST });
   try {
+    console.log(cartReq)
     const { data } = await api.put(`/api/cart/add`, cartReq);
+    console.log("Added item to cart",data)
     dispatch({ type: ADD_ITEM_TO_CART_SUCCESS, payload: data });
   } catch (error) {
     dispatch({ type: ADD_ITEM_TO_CART_FAILURE, payload: error.message });
@@ -28,18 +30,19 @@ export const getCart = () => async (dispatch) => {
   dispatch({ type: GET_CART_REQUEST });
   try {
     const { data } = await api.get(`/api/cart/`);
+    console.log("cart data",data)
     dispatch({ type: GET_CART_SUCCESS, payload: data });
   } catch (error) {
     dispatch({ type: GET_CART_FAILURE, payload: error.message });
   }
 };
 
-export const removeCartItem = (req) => async (dispatch) => {
+export const removeCartItem = (cartItemId) => async (dispatch) => {
   dispatch({ type: REMOVE_CART_ITEM_REQUEST });
 
   try {
-    const { data } = await api.delete(`/api/cartItem/delete/${req.cartItemId}`);
-    dispatch({ type: REMOVE_CART_ITEM_SUCCESS, payload: data });
+    const { data } = await api.delete(`/api/cartItem/delete/${cartItemId}`);
+    dispatch({ type: REMOVE_CART_ITEM_SUCCESS, payload: cartItemId });
   } catch (error) {
     dispatch({ type: REMOVE_CART_ITEM_FAILURE, payload: error.message });
   }
@@ -47,12 +50,13 @@ export const removeCartItem = (req) => async (dispatch) => {
 
 export const updateCartItem = (req) => async (dispatch) => {
   dispatch({ type: UPDATE_CART_ITEM_REQUEST });
-
+  console.log(req)
   try {
     const { data } = await api.put(
-      `/api/cartItem/delete/${req.cartItemId}`,
+      `/api/cartItem/update/${req.cartItemId}`,
       req.data
     );
+    console.log("updated cart data",data)
     dispatch({ type: UPDATE_CART_ITEM_SUCCESS, payload: data });
   } catch (error) {
     dispatch({ type: UPDATE_CART_ITEM_FAILURE, payload: error.message });

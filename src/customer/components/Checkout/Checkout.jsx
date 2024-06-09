@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import { useLocation } from "react-router-dom";
 import DeliveryAddressForm from "./DeliveryAddressForm";
 import OrderSummary from "./OrderSummary";
+import CheckoutLogin from "./CheckoutLogin";
 
 const steps = [
   "Login",
@@ -70,7 +71,7 @@ export default function Checkout() {
 
             </Box>
             <div className="m-10">
-                {step==2?<DeliveryAddressForm/>:<OrderSummary/>}
+                {step==2?<DeliveryAddressForm/>:step==1?<CheckoutLogin/>:<OrderSummary/>}
             </div>
           </React.Fragment>
         )}

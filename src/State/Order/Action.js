@@ -4,11 +4,12 @@ import { CREATE_ORDER_FAILURE, CREATE_ORDER_REQUEST, CREATE_ORDER_SUCCESS } from
 export const createOrder = (req)=>async (dispatch)=>{
     dispatch({type:CREATE_ORDER_REQUEST})
     try {
-        const {data} = api.post('/api/orders/',req.address)
+        const {data} = await api.post('/api/orders/',req.address)
         if(data.id){
             req.navigate({search:`step=3&order_id=${data.id}`})
         }
-        console.log("crated order",data)
+        console.log("order",req)
+        console.log("created order",data)
         dispatch({type:CREATE_ORDER_SUCCESS,payload:data})
     } catch (error) {
         dispatch({type:CREATE_ORDER_FAILURE,payload:error.message})
@@ -18,7 +19,7 @@ export const createOrder = (req)=>async (dispatch)=>{
 export const getOrderById = (orderId)=>async (dispatch)=>{
     dispatch({type:CREATE_ORDER_REQUEST})
     try {
-        const {data} = api.get(`/api/orders/${orderId}`)
+        const {data} = await api.get(`/api/orders/${orderId}`)
         console.log(`order by id:${orderId}`,data)
         dispatch({type:CREATE_ORDER_SUCCESS,payload:data})
     } catch (error) {
