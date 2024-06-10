@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCart } from "../../../State/Cart/Action";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getOrderById } from "../../../State/Order/Action";
+import { createPayment } from "../../../State/Payment/Action";
 
 const OrderSummary = () => {
   const screen = ""
@@ -17,13 +18,15 @@ const OrderSummary = () => {
   const orderId = searchParams.get("order_id")
   const jwt = localStorage.getItem('jwt')
 
-  const handleCheckout = () => {
+  const handleOrderCheckout = () => {
     if (jwt){
-      if(order?.orders?.length<=0){
+      if(order?.orders?.orderItems?.length<=0){
         navigate("/cart")
       }
-      else
-        navigate(`/checkout?step=${2}`);
+      else{
+        console.log(orderId)
+        dispatch(createPayment(orderId))
+      }
     }
     else
       navigate('/login')
@@ -32,6 +35,10 @@ const OrderSummary = () => {
   useEffect(()=>{
     dispatch(getOrderById(orderId))
   },[orderId])
+
+  const handleCheckout=()=>{
+    dispatch(createPayment(orderId))
+  }
 
   return (
     <div>
@@ -46,7 +53,7 @@ const OrderSummary = () => {
         <div className="lg:grid grid-cols-3 relative mx-3">
           <div className="col-span-2">
             {order?.order?.orderItems?.map((item) => (
-              <CartItem cartitem={item}/>
+              <CartItem screen="order" cartitem={item}/>
             ))}
           </div>
           <div className="px-5 sticky top-0 h-[100vh] lg:mt-0">
@@ -80,7 +87,7 @@ const OrderSummary = () => {
                 </div>
               </div>
               <Button
-                onClick={handleCheckout}
+                onClick={handleOrderCheckout}
                 fullWidth
                 variant="contained"
                 sx={{
@@ -89,6 +96,7 @@ const OrderSummary = () => {
                   bgcolor: "#9155fd",
                   mt: "2rem",
                 }}
+                
               >
                 Checkout
               </Button>

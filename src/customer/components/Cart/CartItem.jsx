@@ -8,13 +8,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCart, removeCartItem, updateCartItem } from "../../../State/Cart/Action";
 import { useNavigate } from "react-router-dom";
 
-function CartItem({ cartitem }) {
+function CartItem({ screen,cartitem }) {
   // const [itemCount, setItemCount] = useState(cartitem?.quantity);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { cart } = useSelector((store) => store);
+
+  const screenDisplay = screen=="order"?"hidden":"flex"
+
   const handleProductRoute = () => {
-    navigate(`/product/${cartitem.product.id}`);
+    navigate(`/product/${cartitem?.product?.id}`);
   };
 
   const handleUpdateCart = (num) => {
@@ -56,7 +58,7 @@ function CartItem({ cartitem }) {
           </div>
         </div>
       </div>
-      <div className="lg:flex itemms-center lg:space-x-10 mt-5 pt-2">
+      {screen!="order"?<div className="lg:flex itemms-center lg:space-x-10 mt-5 pt-2" >
         <div className="flex space-x-2 justify-between items-center mt-1">
           <div>
             <IconButton onClick={()=>handleUpdateCart(-1)} sx={{ color: minusColor }} disabled={cartitem?.quantity<=1}>
@@ -73,7 +75,8 @@ function CartItem({ cartitem }) {
         <div className="w-full flex items-center">
           <Button sx={{ color: "RGB(145 85 253)" }} onClick={handleRemoveCartItem}>Remove</Button>
         </div>
-      </div>
+      </div>:<div className="lg:flex itemms-center lg:space-x-10 mt-5 pt-2 h-[30px]" ></div>
+    }
     </div>
   );
 }
