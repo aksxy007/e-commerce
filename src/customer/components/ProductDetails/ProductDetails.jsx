@@ -361,7 +361,7 @@ export default function ProductDetails() {
             <Grid container spacing={7}>
               <Grid item xs={7}>
                 <div className="space-y-5">
-                  {[1, 1, 1, 1].map((item) => (
+                  {products?.products?.reviews?.map((item) => (
                     <ProoductReviewCard />
                   ))}
                 </div>
@@ -424,7 +424,7 @@ export default function ProductDetails() {
         <section className="pt-10">
             <h1 className="font-bold text-xl py-5" >Similar Products</h1>
             <div className="flex flex-wrap space-y-5">
-                {products.products && products.products?.content?.map((item)=> <ProductCard product={item}/>)}
+                {products.products && products.products?.content?.slice(1).map((item)=> <ProductCard product={item}/>)}
             </div>
         </section>
 

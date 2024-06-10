@@ -92,7 +92,7 @@ export default function Product() {
 
   useEffect(() => {
     const [minPrice, maxPrice] =
-      priceValue == null ? [0, 1000] : priceValue.split("-").map(Number);
+      priceValue == null ? [0, 10000] : priceValue.split("-").map(Number);
 
     const data={
       category : param.levelThree,
@@ -106,7 +106,7 @@ export default function Product() {
       pageSize:12,
       stock:stock
     }
-
+    
     dispatch(findProducts(data))
 
   }, [

@@ -31,7 +31,7 @@ const HomeSectionCarousel = ({data,sectionName}) => {
 
 
   return (
-    <div className="border">
+    <div className="">
         <h2 className="text-2xl font-extrabold text-gray-800 py-5">{sectionName}</h2>
       <div className="relative p-5">
         <AliceCarousel

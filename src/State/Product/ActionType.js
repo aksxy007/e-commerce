@@ -18,7 +18,7 @@ export const findProducts = (reqData) => async (dispatch) => {
 
   try {
     const {data} =await api.get(`/api/products?colors=${colors}&sizes=${sizes}&minPrice=${minPrice}&maxPrice=${maxPrice}&minDiscount=${minDiscount}&category=${category}&stock=${stock}&sort=${sort}&pageNumber=${pageNumber}&pageSize=${pageSize}`)
-    console.log("product data by category",data)
+    console.log(`product data by ${category}`,data)
     dispatch({type:FIND_PRODUCTS_SUCCESS,payload:data});
   } catch (error) {
     dispatch({type:FIND_PRODUCTS_FAILURE,payload:error.message})
